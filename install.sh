@@ -1,6 +1,6 @@
 #!/bin/bash
 # Sharingan — Autonomous Testing Agent for Claude Code
-# Install: curl -fsSL https://raw.githubusercontent.com/shruthikj/sharingan/main/install.sh | bash
+# Install: curl -fsSL https://raw.githubusercontent.com/ctoapplymatic/sharingan/main/install.sh | bash
 
 set -e
 
@@ -25,11 +25,11 @@ echo "  Installing Sharingan..."
 
 if command -v uv &> /dev/null; then
     echo "  Using uv..."
-    uv pip install sharingan
+    uv pip install sharingan-testing
 elif command -v pip3 &> /dev/null; then
     pip3 install sharingan
 elif command -v pip &> /dev/null; then
-    pip install sharingan
+    pip install sharingan-testing
 else
     echo "Error: pip not found. Install pip or uv first."
     exit 1

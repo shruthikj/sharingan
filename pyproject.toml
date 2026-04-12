@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "sharingan"
+name = "sharingan-testing"
 version = "0.1.0"
 description = "Autonomous testing agent for Claude Code — discovers, tests, diagnoses, and fixes your web app"
 authors = [{name = "Shruthi Krithika", email = "cto@applymatic.ai"}]
@@ -38,9 +38,9 @@ dev = [
 sharingan = "sharingan.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/shruthikj/sharingan"
-Repository = "https://github.com/shruthikj/sharingan"
-Issues = "https://github.com/shruthikj/sharingan/issues"
+Homepage = "https://github.com/ctoapplymatic/sharingan"
+Repository = "https://github.com/ctoapplymatic/sharingan"
+Issues = "https://github.com/ctoapplymatic/sharingan/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/sharingan"]

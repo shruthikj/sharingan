@@ -48,13 +48,13 @@ Sharingan doesn't just fix broken tests — it finds broken applications and fix
 ### Install
 
 ```bash
-pip install sharingan
+pip install sharingan-testing
 ```
 
 Or with uv:
 
 ```bash
-uv pip install sharingan
+uv pip install sharingan-testing-testing
 ```
 
 Then initialize in your project:
@@ -142,7 +142,7 @@ Run Sharingan against it to see all three discovered and fixed.
 ## Development
 
 ```bash
-git clone https://github.com/shruthikj/sharingan.git
+git clone https://github.com/ctoapplymatic/sharingan.git
 cd sharingan
 pip install -e ".[dev]"
 pytest
