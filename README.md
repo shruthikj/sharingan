@@ -48,13 +48,13 @@ Sharingan doesn't just fix broken tests — it finds broken applications and fix
 ### Install
 
 ```bash
-pip install sharingan-testing
+pip install sharingan-autotest
 ```
 
 Or with uv:
 
 ```bash
-uv pip install sharingan-testing-testing
+uv pip install sharingan-autotest-testing
 ```
 
 Then initialize in your project:

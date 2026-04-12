@@ -25,11 +25,11 @@ echo "  Installing Sharingan..."
 
 if command -v uv &> /dev/null; then
     echo "  Using uv..."
-    uv pip install sharingan-testing
+    uv pip install sharingan-autotest
 elif command -v pip3 &> /dev/null; then
     pip3 install sharingan
 elif command -v pip &> /dev/null; then
-    pip install sharingan-testing
+    pip install sharingan-autotest
 else
     echo "Error: pip not found. Install pip or uv first."
     exit 1
