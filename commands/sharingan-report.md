@@ -1,43 +1,44 @@
-# /sharingan-report — Generate Report from Last Run
+# /sharingan-report — Regenerate Report from Last Run
 
-Regenerate the Sharingan report from the most recent test run. Useful after manual fixes to update the report.
+Regenerate `SHARINGAN_REPORT.md` from the most recent test results. Useful after manual fixes, or to refresh the report with the current state.
 
-## Instructions
+## Steps
 
-1. **Find results**: Look for test results in `tests/sharingan/results.json` or the latest Playwright output.
+1. **Find the results:**
+   - `tests/sharingan/results.json`
+   - If missing, tell the user to run `/sharingan` or `/sharingan-fix` first
 
-2. **If no results found**: Tell the user to run `/sharingan-test` first.
+2. **Re-run the test suite** to get the latest state (don't trust stale results):
+   ```bash
+   cd tests/sharingan && npx playwright test 2>&1 | tail -10
+   ```
 
-3. **Parse results**: Count passed, failed, skipped, and fixed tests. Categorize by type (auth, navigation, form, API, permission, accessibility).
+3. **Re-organize screenshots** (in case there are new ones):
+   ```bash
+   node ~/.sharingan/scripts/organize-screenshots.js \
+     --results tests/sharingan/test-results \
+     --output tests/sharingan/screenshots \
+     --results-json tests/sharingan/results.json
+   ```
 
-4. **Check for previous report**: If `SHARINGAN_REPORT.md` exists, note what was previously reported to show progress.
+4. **Read the results** and count: passed, failed, flaky, marked-as-known-bug.
 
-5. **Generate report**: Write `SHARINGAN_REPORT.md` with:
+5. **List bugs found** by grepping the test files for `test.fail(true, "BUG: ...")` comments:
+   ```bash
+   grep -rn "test.fail.*BUG:" tests/sharingan/
+   ```
 
-```markdown
-# Sharingan Report
-*Generated: [timestamp]*
-*Target: [base_url from playwright config or localhost:3000]*
-*Framework: [auto-detect from project files]*
+6. **Detect performance metrics** by grepping the test output for `Perf for ...` lines.
 
-## Discovery
-- Routes found: [count from scanning project]
-- Forms found: [count]
-- Auth-protected routes: [count]
+7. **Write `SHARINGAN_REPORT.md`** with the same structure as the main `/sharingan` command:
+   - Summary (counts, time, bugs)
+   - Test results table by category
+   - Bugs found (each with file, severity, fix)
+   - Screenshots (link to `tests/sharingan/screenshots/`)
+   - Visual baselines (link to snapshot dir)
+   - Performance summary
+   - How to re-run
 
-## Test Results
-| Category | Tests | Passed | Failed | Fixed | Needs Review |
-|----------|-------|--------|--------|-------|-------------|
-| ...      | ...   | ...    | ...    | ...   | ...         |
+8. **Print a 5-line summary** to chat.
 
-## Bugs Found & Fixed
-[List any bugs that were auto-fixed with file, issue, fix description]
-
-## Needs Human Review
-[List any tests that couldn't be fixed after 3 attempts]
-
-## Screenshots
-[Failure screenshots in tests/sharingan/screenshots/]
-```
-
-6. **Print summary**: Show the key stats in the console.
+This command is non-destructive — it only writes the report file. It does NOT modify tests or application code.

@@ -1,72 +1,90 @@
 #!/bin/bash
-# Sharingan — Autonomous Testing Agent for Claude Code
-# Install: curl -fsSL https://raw.githubusercontent.com/ctoapplymatic/sharingan/main/install.sh | bash
+#
+# Sharingan v0.3 — Installer
+#
+# One-liner: curl -fsSL https://raw.githubusercontent.com/ctoapplymatic/sharingan/main/install.sh | bash
+#
+# What this does:
+# 1. Clones the sharingan repo to ~/.sharingan/
+# 2. Symlinks commands/*.md into ~/.claude/commands/
+# 3. Verifies node + playwright are available (or warns)
+#
+# Sharingan is a pure Claude Code skill — no Python, no pip, no npm package.
+# The slash commands live in your global ~/.claude/commands/ and work in any project.
 
 set -e
 
+REPO_URL="${SHARINGAN_REPO:-https://github.com/ctoapplymatic/sharingan.git}"
+INSTALL_DIR="${SHARINGAN_INSTALL_DIR:-$HOME/.sharingan}"
+CLAUDE_COMMANDS_DIR="${CLAUDE_COMMANDS_DIR:-$HOME/.claude/commands}"
+
+cyan() { printf "\033[36m%s\033[0m\n" "$1"; }
+green() { printf "\033[32m%s\033[0m\n" "$1"; }
+yellow() { printf "\033[33m%s\033[0m\n" "$1"; }
+red() { printf "\033[31m%s\033[0m\n" "$1"; }
+
 echo ""
-echo "  SHARINGAN — The eye that sees all bugs"
-echo "  Autonomous Testing Agent for Claude Code"
+cyan "  Sharingan v0.3 — installer"
+cyan "  the eye that sees all bugs"
 echo ""
 
-# Check Python version
-if ! command -v python3 &> /dev/null; then
-    echo "Error: Python 3 is required but not found."
-    echo "Install Python 3.10+ from https://python.org"
-    exit 1
+# Check git
+if ! command -v git >/dev/null 2>&1; then
+  red "  git not found — install git first"
+  exit 1
 fi
 
-PYTHON_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-echo "  Python version: $PYTHON_VERSION"
-
-# Install the package
-echo ""
-echo "  Installing Sharingan..."
-
-if command -v uv &> /dev/null; then
-    echo "  Using uv..."
-    uv pip install sharingan-autotest
-elif command -v pip3 &> /dev/null; then
-    pip3 install sharingan
-elif command -v pip &> /dev/null; then
-    pip install sharingan-autotest
+# Clone or update
+if [ -d "$INSTALL_DIR/.git" ]; then
+  echo "  → updating existing install at $INSTALL_DIR"
+  git -C "$INSTALL_DIR" pull --quiet
 else
-    echo "Error: pip not found. Install pip or uv first."
-    exit 1
+  echo "  → cloning to $INSTALL_DIR"
+  git clone --quiet "$REPO_URL" "$INSTALL_DIR"
 fi
 
-# Install Playwright browsers
+# Make scripts executable
+chmod +x "$INSTALL_DIR/scripts/"*.js 2>/dev/null || true
+
+# Symlink commands
+mkdir -p "$CLAUDE_COMMANDS_DIR"
+for cmd in "$INSTALL_DIR"/commands/*.md; do
+  name=$(basename "$cmd")
+  target="$CLAUDE_COMMANDS_DIR/$name"
+  ln -sf "$cmd" "$target"
+  echo "  → installed /$( basename "$name" .md)"
+done
+
 echo ""
-echo "  Installing Playwright browsers..."
-if command -v npx &> /dev/null; then
-    npx playwright install chromium
+
+# Check node
+if command -v node >/dev/null 2>&1; then
+  green "  ✓ node $(node --version)"
 else
-    echo "  Warning: npx not found. You'll need to install Playwright browsers manually:"
-    echo "    npx playwright install chromium"
+  yellow "  ! node not found — install Node 18+ before running /sharingan"
 fi
 
-# Copy slash commands to project
-echo ""
-echo "  Installing Claude Code slash commands..."
-
-COMMANDS_DIR=".claude/commands"
-mkdir -p "$COMMANDS_DIR"
-
-# Try to find the installed package location
-SHARINGAN_DIR=$(python3 -c "import sharingan; import os; print(os.path.dirname(os.path.dirname(sharingan.__file__)))" 2>/dev/null || echo "")
-
-if [ -n "$SHARINGAN_DIR" ] && [ -d "$SHARINGAN_DIR/commands" ]; then
-    cp "$SHARINGAN_DIR/commands/"*.md "$COMMANDS_DIR/" 2>/dev/null || true
-    echo "  Slash commands installed to $COMMANDS_DIR/"
+# Check playwright (global or project-level)
+if command -v npx >/dev/null 2>&1; then
+  green "  ✓ npx available (Sharingan installs Playwright per-project as needed)"
 else
-    echo "  Note: Run 'sharingan init' in your project directory to install slash commands."
+  yellow "  ! npx not found — install Node + npm"
 fi
 
 echo ""
-echo "  Sharingan installed successfully!"
+green "  Sharingan installed!"
 echo ""
-echo "  Quick start:"
-echo "    1. cd your-project"
-echo "    2. sharingan init"
-echo "    3. Type /sharingan in Claude Code"
+echo "  Get started:"
+echo "    1. cd into your project (Next.js, FastAPI, Django, etc.)"
+echo "    2. Make sure your dev server(s) are running"
+echo "    3. In Claude Code, type: /sharingan"
+echo ""
+echo "  Other commands:"
+echo "    /sharingan-scan      — discovery only (dry run)"
+echo "    /sharingan-fix       — fix failures from last run"
+echo "    /sharingan-report    — regenerate report"
+echo "    /sharingan-resume    — resume after manual login"
+echo ""
+echo "  Sharingan lives at: $INSTALL_DIR"
+echo "  Slash commands at:  $CLAUDE_COMMANDS_DIR"
 echo ""
