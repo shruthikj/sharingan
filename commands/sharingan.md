@@ -29,7 +29,7 @@ The supporting scripts are at:
 - `~/.sharingan/scripts/paste-cookies.js` — fallback for pasting cookies from another browser
 - `~/.sharingan/scripts/organize-screenshots.js` — flattens Playwright's hashed dirs into a clean folder
 
-If `~/.sharingan/scripts/` doesn't exist, tell the user to run `curl -fsSL https://raw.githubusercontent.com/ctoapplymatic/sharingan/main/install.sh | bash` and stop.
+If `~/.sharingan/scripts/` doesn't exist, tell the user to run `curl -fsSL https://raw.githubusercontent.com/shruthikj/sharingan/main/install.sh | bash` and stop.
 
 ---
 

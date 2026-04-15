@@ -38,9 +38,9 @@ dev = [
 sharingan = "sharingan.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/ctoapplymatic/sharingan"
-Repository = "https://github.com/ctoapplymatic/sharingan"
-Issues = "https://github.com/ctoapplymatic/sharingan/issues"
+Homepage = "https://github.com/shruthikj/sharingan"
+Repository = "https://github.com/shruthikj/sharingan"
+Issues = "https://github.com/shruthikj/sharingan/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/sharingan"]

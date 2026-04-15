@@ -2,7 +2,7 @@
 #
 # Sharingan v0.3 — Installer
 #
-# One-liner: curl -fsSL https://raw.githubusercontent.com/ctoapplymatic/sharingan/main/install.sh | bash
+# One-liner: curl -fsSL https://raw.githubusercontent.com/shruthikj/sharingan/main/install.sh | bash
 #
 # What this does:
 # 1. Clones the sharingan repo to ~/.sharingan/
@@ -14,7 +14,7 @@
 
 set -e
 
-REPO_URL="${SHARINGAN_REPO:-https://github.com/ctoapplymatic/sharingan.git}"
+REPO_URL="${SHARINGAN_REPO:-https://github.com/shruthikj/sharingan.git}"
 INSTALL_DIR="${SHARINGAN_INSTALL_DIR:-$HOME/.sharingan}"
 CLAUDE_COMMANDS_DIR="${CLAUDE_COMMANDS_DIR:-$HOME/.claude/commands}"
 
@@ -45,6 +45,20 @@ fi
 
 # Make scripts executable
 chmod +x "$INSTALL_DIR/scripts/"*.js 2>/dev/null || true
+
+# Install Playwright as a dependency of the sharingan install dir
+# so auth-capture.js can find it via require() regardless of which project
+# the user runs /sharingan in.
+if [ ! -d "$INSTALL_DIR/node_modules/playwright" ]; then
+  echo "  → installing Playwright (one-time, ~70MB)..."
+  if command -v npm >/dev/null 2>&1; then
+    (cd "$INSTALL_DIR" && npm init -y --silent >/dev/null 2>&1 || true)
+    (cd "$INSTALL_DIR" && npm install --silent playwright 2>&1 | tail -3) || yellow "  ! npm install playwright failed — try manually: cd $INSTALL_DIR && npm install playwright"
+    (cd "$INSTALL_DIR" && npx playwright install chromium --with-deps 2>&1 | tail -2) || yellow "  ! playwright install chromium failed"
+  else
+    yellow "  ! npm not found — install Node.js + npm, then run: cd $INSTALL_DIR && npm install playwright && npx playwright install chromium"
+  fi
+fi
 
 # Symlink commands
 mkdir -p "$CLAUDE_COMMANDS_DIR"

@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-FFD700?style=for-the-badge)](https://claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-0.3.0-blueviolet?style=for-the-badge)](https://github.com/ctoapplymatic/sharingan/releases)
+[![Version](https://img.shields.io/badge/version-0.3.0-blueviolet?style=for-the-badge)](https://github.com/shruthikj/sharingan/releases)
 [![Built with](https://img.shields.io/badge/Built%20with-Playwright-2EAD33?style=for-the-badge&logo=playwright)](https://playwright.dev)
 
 </div>
@@ -29,7 +29,7 @@ The hard part of testing isn't writing assertions — it's **knowing what to tes
 ## Quick install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ctoapplymatic/sharingan/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/shruthikj/sharingan/main/install.sh | bash
 ```
 
 Clones to `~/.sharingan/`, symlinks slash commands into `~/.claude/commands/`, installs Playwright + Chromium for the auth-capture script. Re-run the same command to update.
@@ -178,7 +178,7 @@ The pause-for-human-login part is what makes the rest of it feasible. Without it
 Sharingan is two things: **prompts** (`commands/*.md`) and **scripts** (`scripts/*.js`). To hack on it:
 
 ```bash
-git clone https://github.com/ctoapplymatic/sharingan
+git clone https://github.com/shruthikj/sharingan
 cd sharingan
 SHARINGAN_INSTALL_DIR=$(pwd) ./install.sh    # symlinks your local copy
 # edit commands/sharingan.md or scripts/auth-capture.js

@@ -27,7 +27,7 @@ pip uninstall sharingan-autotest
 Then install v0.3:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ctoapplymatic/sharingan/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/shruthikj/sharingan/main/install.sh | bash
 ```
 
 Your slash commands at `~/.claude/commands/sharingan*.md` will be replaced by symlinks to the new versions. Existing tests in your projects' `tests/sharingan/` directories are not affected — you can re-run them with the v0.3 commands.
