@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/sharingan.png" alt="Sharingan" width="220">
+<img src="assets/sharingan.svg" alt="Sharingan" width="220">
 
 ```
    ____   _   _    _    ____  ___ _   _  ____    _    _   _
